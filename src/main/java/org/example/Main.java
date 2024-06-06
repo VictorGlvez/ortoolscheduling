@@ -63,7 +63,7 @@ public class Main {
         // Creates the model.
         CpModel model = new CpModel();
 
-        // Creates shift variables.
+        System.out.println("Creando turnos");
         // shifts[(n, d, s)]: nurse 'n' works shift 's' on day 'd'.
         Literal[][][] shifts = new Literal[numNurses][numDays][numShifts];
         for (int n : allNurses) {
@@ -74,6 +74,7 @@ public class Main {
             }
         }
 
+        System.out.println("Asignando turnos a cada enfermera");
         // Each shift is assigned to exactly one nurse in the schedule period.
         for (int d : allDays) {
             for (int s : allShifts) {
@@ -85,7 +86,7 @@ public class Main {
             }
         }
 
-        // Each nurse works at most one shift per day.
+        System.out.println("haciendo que cada enfermera trabaje solo un turno al dia");
         for (int n : allNurses) {
             for (int d : allDays) {
                 List<Literal> work = new ArrayList<>();
@@ -100,6 +101,7 @@ public class Main {
         // minShiftsPerNurse shifts. If this is not possible, because the total
         // number of shifts is not divisible by the number of nurses, some nurses will
         // be assigned one more shift.
+        System.out.println("distribucion impar para la organizacion de cada jornada");
         int minShiftsPerNurse = (numShifts * numDays) / numNurses;
         int maxShiftsPerNurse;
         if ((numShifts * numDays) % numNurses == 0) {
@@ -118,6 +120,7 @@ public class Main {
         }
 
         // Adding vacation constraints for each nurse
+        System.out.println("añadiendo la condicion de 30 dias de vacaciones");
         for (int n : allNurses) {
             // Randomly assign a start day for the vacation
             int vacationStart = (int) (Math.random() * (numDays - vacationDays));
@@ -134,6 +137,7 @@ public class Main {
         solver.getParameters().setEnumerateAllSolutions(true);
 
         // Display the first five solutions.
+        System.out.println("generando resultado: \n\n\n");
         final int solutionLimit = 5;
         class VarArraySolutionPrinterWithLimit extends CpSolverSolutionCallback {
             public VarArraySolutionPrinterWithLimit(
